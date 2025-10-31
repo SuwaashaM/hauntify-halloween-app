@@ -1,766 +1,86 @@
-{
- "cells": [
-  {
-   "cell_type": "code",
-   "execution_count": 1,
-   "id": "93d2e1ec-eaab-4595-a4d7-6889f6a81887",
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "import pandas as pd\n",
-    "from sklearn.feature_extraction.text import TfidfVectorizer\n",
-    "from sklearn.linear_model import LogisticRegression\n",
-    "from sklearn.model_selection import train_test_split\n",
-    "from sklearn.metrics import accuracy_score, classification_report\n",
-    "import pickle\n"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 6,
-   "id": "4615f1ea-b4fd-4e9a-a2c1-73db9f6e3166",
-   "metadata": {},
-   "outputs": [
-    {
-     "name": "stdout",
-     "output_type": "stream",
-     "text": [
-      "First 5 rows of dataset:\n"
-     ]
-    },
-    {
-     "data": {
-      "text/plain": [
-       "(108, 2)"
-      ]
-     },
-     "execution_count": 6,
-     "metadata": {},
-     "output_type": "execute_result"
-    }
-   ],
-   "source": [
-    "df = pd.read_csv(r\"C:\\Users\\adminS\\OneDrive\\Data Science\\hauntify_posts.csv\")\n",
-    "print(\"First 5 rows of dataset:\")\n",
-    "df.head(100)\n",
-    "df.shape"
-   ]
-  },
-  {
-   "cell_type": "markdown",
-   "id": "c2184a22-392d-4581-a3f9-471ec3b9976d",
-   "metadata": {},
-   "source": [
-    "Convert text to numbers (TF-IDF)"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 7,
-   "id": "4c0500c3-dbe5-464b-bed1-30dd25aca7d2",
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "vectorizer = TfidfVectorizer()\n",
-    "X = vectorizer.fit_transform(df['post'])\n",
-    "y = df['label']\n"
-   ]
-  },
-  {
-   "cell_type": "markdown",
-   "id": "41439867-b78e-431b-83fe-70d9796644ca",
-   "metadata": {},
-   "source": [
-    "Split data into training and testing"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 8,
-   "id": "bcaa5c4f-391f-41ce-80b5-cb0ef89e9854",
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)\n"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 9,
-   "id": "90013cc3-5c4f-4395-b130-1bd086d47f8f",
-   "metadata": {},
-   "outputs": [
-    {
-     "data": {
-      "text/html": [
-       "<style>#sk-container-id-1 {\n",
-       "  /* Definition of color scheme common for light and dark mode */\n",
-       "  --sklearn-color-text: #000;\n",
-       "  --sklearn-color-text-muted: #666;\n",
-       "  --sklearn-color-line: gray;\n",
-       "  /* Definition of color scheme for unfitted estimators */\n",
-       "  --sklearn-color-unfitted-level-0: #fff5e6;\n",
-       "  --sklearn-color-unfitted-level-1: #f6e4d2;\n",
-       "  --sklearn-color-unfitted-level-2: #ffe0b3;\n",
-       "  --sklearn-color-unfitted-level-3: chocolate;\n",
-       "  /* Definition of color scheme for fitted estimators */\n",
-       "  --sklearn-color-fitted-level-0: #f0f8ff;\n",
-       "  --sklearn-color-fitted-level-1: #d4ebff;\n",
-       "  --sklearn-color-fitted-level-2: #b3dbfd;\n",
-       "  --sklearn-color-fitted-level-3: cornflowerblue;\n",
-       "\n",
-       "  /* Specific color for light theme */\n",
-       "  --sklearn-color-text-on-default-background: var(--sg-text-color, var(--theme-code-foreground, var(--jp-content-font-color1, black)));\n",
-       "  --sklearn-color-background: var(--sg-background-color, var(--theme-background, var(--jp-layout-color0, white)));\n",
-       "  --sklearn-color-border-box: var(--sg-text-color, var(--theme-code-foreground, var(--jp-content-font-color1, black)));\n",
-       "  --sklearn-color-icon: #696969;\n",
-       "\n",
-       "  @media (prefers-color-scheme: dark) {\n",
-       "    /* Redefinition of color scheme for dark theme */\n",
-       "    --sklearn-color-text-on-default-background: var(--sg-text-color, var(--theme-code-foreground, var(--jp-content-font-color1, white)));\n",
-       "    --sklearn-color-background: var(--sg-background-color, var(--theme-background, var(--jp-layout-color0, #111)));\n",
-       "    --sklearn-color-border-box: var(--sg-text-color, var(--theme-code-foreground, var(--jp-content-font-color1, white)));\n",
-       "    --sklearn-color-icon: #878787;\n",
-       "  }\n",
-       "}\n",
-       "\n",
-       "#sk-container-id-1 {\n",
-       "  color: var(--sklearn-color-text);\n",
-       "}\n",
-       "\n",
-       "#sk-container-id-1 pre {\n",
-       "  padding: 0;\n",
-       "}\n",
-       "\n",
-       "#sk-container-id-1 input.sk-hidden--visually {\n",
-       "  border: 0;\n",
-       "  clip: rect(1px 1px 1px 1px);\n",
-       "  clip: rect(1px, 1px, 1px, 1px);\n",
-       "  height: 1px;\n",
-       "  margin: -1px;\n",
-       "  overflow: hidden;\n",
-       "  padding: 0;\n",
-       "  position: absolute;\n",
-       "  width: 1px;\n",
-       "}\n",
-       "\n",
-       "#sk-container-id-1 div.sk-dashed-wrapped {\n",
-       "  border: 1px dashed var(--sklearn-color-line);\n",
-       "  margin: 0 0.4em 0.5em 0.4em;\n",
-       "  box-sizing: border-box;\n",
-       "  padding-bottom: 0.4em;\n",
-       "  background-color: var(--sklearn-color-background);\n",
-       "}\n",
-       "\n",
-       "#sk-container-id-1 div.sk-container {\n",
-       "  /* jupyter's `normalize.less` sets `[hidden] { display: none; }`\n",
-       "     but bootstrap.min.css set `[hidden] { display: none !important; }`\n",
-       "     so we also need the `!important` here to be able to override the\n",
-       "     default hidden behavior on the sphinx rendered scikit-learn.org.\n",
-       "     See: https://github.com/scikit-learn/scikit-learn/issues/21755 */\n",
-       "  display: inline-block !important;\n",
-       "  position: relative;\n",
-       "}\n",
-       "\n",
-       "#sk-container-id-1 div.sk-text-repr-fallback {\n",
-       "  display: none;\n",
-       "}\n",
-       "\n",
-       "div.sk-parallel-item,\n",
-       "div.sk-serial,\n",
-       "div.sk-item {\n",
-       "  /* draw centered vertical line to link estimators */\n",
-       "  background-image: linear-gradient(var(--sklearn-color-text-on-default-background), var(--sklearn-color-text-on-default-background));\n",
-       "  background-size: 2px 100%;\n",
-       "  background-repeat: no-repeat;\n",
-       "  background-position: center center;\n",
-       "}\n",
-       "\n",
-       "/* Parallel-specific style estimator block */\n",
-       "\n",
-       "#sk-container-id-1 div.sk-parallel-item::after {\n",
-       "  content: \"\";\n",
-       "  width: 100%;\n",
-       "  border-bottom: 2px solid var(--sklearn-color-text-on-default-background);\n",
-       "  flex-grow: 1;\n",
-       "}\n",
-       "\n",
-       "#sk-container-id-1 div.sk-parallel {\n",
-       "  display: flex;\n",
-       "  align-items: stretch;\n",
-       "  justify-content: center;\n",
-       "  background-color: var(--sklearn-color-background);\n",
-       "  position: relative;\n",
-       "}\n",
-       "\n",
-       "#sk-container-id-1 div.sk-parallel-item {\n",
-       "  display: flex;\n",
-       "  flex-direction: column;\n",
-       "}\n",
-       "\n",
-       "#sk-container-id-1 div.sk-parallel-item:first-child::after {\n",
-       "  align-self: flex-end;\n",
-       "  width: 50%;\n",
-       "}\n",
-       "\n",
-       "#sk-container-id-1 div.sk-parallel-item:last-child::after {\n",
-       "  align-self: flex-start;\n",
-       "  width: 50%;\n",
-       "}\n",
-       "\n",
-       "#sk-container-id-1 div.sk-parallel-item:only-child::after {\n",
-       "  width: 0;\n",
-       "}\n",
-       "\n",
-       "/* Serial-specific style estimator block */\n",
-       "\n",
-       "#sk-container-id-1 div.sk-serial {\n",
-       "  display: flex;\n",
-       "  flex-direction: column;\n",
-       "  align-items: center;\n",
-       "  background-color: var(--sklearn-color-background);\n",
-       "  padding-right: 1em;\n",
-       "  padding-left: 1em;\n",
-       "}\n",
-       "\n",
-       "\n",
-       "/* Toggleable style: style used for estimator/Pipeline/ColumnTransformer box that is\n",
-       "clickable and can be expanded/collapsed.\n",
-       "- Pipeline and ColumnTransformer use this feature and define the default style\n",
-       "- Estimators will overwrite some part of the style using the `sk-estimator` class\n",
-       "*/\n",
-       "\n",
-       "/* Pipeline and ColumnTransformer style (default) */\n",
-       "\n",
-       "#sk-container-id-1 div.sk-toggleable {\n",
-       "  /* Default theme specific background. It is overwritten whether we have a\n",
-       "  specific estimator or a Pipeline/ColumnTransformer */\n",
-       "  background-color: var(--sklearn-color-background);\n",
-       "}\n",
-       "\n",
-       "/* Toggleable label */\n",
-       "#sk-container-id-1 label.sk-toggleable__label {\n",
-       "  cursor: pointer;\n",
-       "  display: flex;\n",
-       "  width: 100%;\n",
-       "  margin-bottom: 0;\n",
-       "  padding: 0.5em;\n",
-       "  box-sizing: border-box;\n",
-       "  text-align: center;\n",
-       "  align-items: start;\n",
-       "  justify-content: space-between;\n",
-       "  gap: 0.5em;\n",
-       "}\n",
-       "\n",
-       "#sk-container-id-1 label.sk-toggleable__label .caption {\n",
-       "  font-size: 0.6rem;\n",
-       "  font-weight: lighter;\n",
-       "  color: var(--sklearn-color-text-muted);\n",
-       "}\n",
-       "\n",
-       "#sk-container-id-1 label.sk-toggleable__label-arrow:before {\n",
-       "  /* Arrow on the left of the label */\n",
-       "  content: \"▸\";\n",
-       "  float: left;\n",
-       "  margin-right: 0.25em;\n",
-       "  color: var(--sklearn-color-icon);\n",
-       "}\n",
-       "\n",
-       "#sk-container-id-1 label.sk-toggleable__label-arrow:hover:before {\n",
-       "  color: var(--sklearn-color-text);\n",
-       "}\n",
-       "\n",
-       "/* Toggleable content - dropdown */\n",
-       "\n",
-       "#sk-container-id-1 div.sk-toggleable__content {\n",
-       "  max-height: 0;\n",
-       "  max-width: 0;\n",
-       "  overflow: hidden;\n",
-       "  text-align: left;\n",
-       "  /* unfitted */\n",
-       "  background-color: var(--sklearn-color-unfitted-level-0);\n",
-       "}\n",
-       "\n",
-       "#sk-container-id-1 div.sk-toggleable__content.fitted {\n",
-       "  /* fitted */\n",
-       "  background-color: var(--sklearn-color-fitted-level-0);\n",
-       "}\n",
-       "\n",
-       "#sk-container-id-1 div.sk-toggleable__content pre {\n",
-       "  margin: 0.2em;\n",
-       "  border-radius: 0.25em;\n",
-       "  color: var(--sklearn-color-text);\n",
-       "  /* unfitted */\n",
-       "  background-color: var(--sklearn-color-unfitted-level-0);\n",
-       "}\n",
-       "\n",
-       "#sk-container-id-1 div.sk-toggleable__content.fitted pre {\n",
-       "  /* unfitted */\n",
-       "  background-color: var(--sklearn-color-fitted-level-0);\n",
-       "}\n",
-       "\n",
-       "#sk-container-id-1 input.sk-toggleable__control:checked~div.sk-toggleable__content {\n",
-       "  /* Expand drop-down */\n",
-       "  max-height: 200px;\n",
-       "  max-width: 100%;\n",
-       "  overflow: auto;\n",
-       "}\n",
-       "\n",
-       "#sk-container-id-1 input.sk-toggleable__control:checked~label.sk-toggleable__label-arrow:before {\n",
-       "  content: \"▾\";\n",
-       "}\n",
-       "\n",
-       "/* Pipeline/ColumnTransformer-specific style */\n",
-       "\n",
-       "#sk-container-id-1 div.sk-label input.sk-toggleable__control:checked~label.sk-toggleable__label {\n",
-       "  color: var(--sklearn-color-text);\n",
-       "  background-color: var(--sklearn-color-unfitted-level-2);\n",
-       "}\n",
-       "\n",
-       "#sk-container-id-1 div.sk-label.fitted input.sk-toggleable__control:checked~label.sk-toggleable__label {\n",
-       "  background-color: var(--sklearn-color-fitted-level-2);\n",
-       "}\n",
-       "\n",
-       "/* Estimator-specific style */\n",
-       "\n",
-       "/* Colorize estimator box */\n",
-       "#sk-container-id-1 div.sk-estimator input.sk-toggleable__control:checked~label.sk-toggleable__label {\n",
-       "  /* unfitted */\n",
-       "  background-color: var(--sklearn-color-unfitted-level-2);\n",
-       "}\n",
-       "\n",
-       "#sk-container-id-1 div.sk-estimator.fitted input.sk-toggleable__control:checked~label.sk-toggleable__label {\n",
-       "  /* fitted */\n",
-       "  background-color: var(--sklearn-color-fitted-level-2);\n",
-       "}\n",
-       "\n",
-       "#sk-container-id-1 div.sk-label label.sk-toggleable__label,\n",
-       "#sk-container-id-1 div.sk-label label {\n",
-       "  /* The background is the default theme color */\n",
-       "  color: var(--sklearn-color-text-on-default-background);\n",
-       "}\n",
-       "\n",
-       "/* On hover, darken the color of the background */\n",
-       "#sk-container-id-1 div.sk-label:hover label.sk-toggleable__label {\n",
-       "  color: var(--sklearn-color-text);\n",
-       "  background-color: var(--sklearn-color-unfitted-level-2);\n",
-       "}\n",
-       "\n",
-       "/* Label box, darken color on hover, fitted */\n",
-       "#sk-container-id-1 div.sk-label.fitted:hover label.sk-toggleable__label.fitted {\n",
-       "  color: var(--sklearn-color-text);\n",
-       "  background-color: var(--sklearn-color-fitted-level-2);\n",
-       "}\n",
-       "\n",
-       "/* Estimator label */\n",
-       "\n",
-       "#sk-container-id-1 div.sk-label label {\n",
-       "  font-family: monospace;\n",
-       "  font-weight: bold;\n",
-       "  display: inline-block;\n",
-       "  line-height: 1.2em;\n",
-       "}\n",
-       "\n",
-       "#sk-container-id-1 div.sk-label-container {\n",
-       "  text-align: center;\n",
-       "}\n",
-       "\n",
-       "/* Estimator-specific */\n",
-       "#sk-container-id-1 div.sk-estimator {\n",
-       "  font-family: monospace;\n",
-       "  border: 1px dotted var(--sklearn-color-border-box);\n",
-       "  border-radius: 0.25em;\n",
-       "  box-sizing: border-box;\n",
-       "  margin-bottom: 0.5em;\n",
-       "  /* unfitted */\n",
-       "  background-color: var(--sklearn-color-unfitted-level-0);\n",
-       "}\n",
-       "\n",
-       "#sk-container-id-1 div.sk-estimator.fitted {\n",
-       "  /* fitted */\n",
-       "  background-color: var(--sklearn-color-fitted-level-0);\n",
-       "}\n",
-       "\n",
-       "/* on hover */\n",
-       "#sk-container-id-1 div.sk-estimator:hover {\n",
-       "  /* unfitted */\n",
-       "  background-color: var(--sklearn-color-unfitted-level-2);\n",
-       "}\n",
-       "\n",
-       "#sk-container-id-1 div.sk-estimator.fitted:hover {\n",
-       "  /* fitted */\n",
-       "  background-color: var(--sklearn-color-fitted-level-2);\n",
-       "}\n",
-       "\n",
-       "/* Specification for estimator info (e.g. \"i\" and \"?\") */\n",
-       "\n",
-       "/* Common style for \"i\" and \"?\" */\n",
-       "\n",
-       ".sk-estimator-doc-link,\n",
-       "a:link.sk-estimator-doc-link,\n",
-       "a:visited.sk-estimator-doc-link {\n",
-       "  float: right;\n",
-       "  font-size: smaller;\n",
-       "  line-height: 1em;\n",
-       "  font-family: monospace;\n",
-       "  background-color: var(--sklearn-color-background);\n",
-       "  border-radius: 1em;\n",
-       "  height: 1em;\n",
-       "  width: 1em;\n",
-       "  text-decoration: none !important;\n",
-       "  margin-left: 0.5em;\n",
-       "  text-align: center;\n",
-       "  /* unfitted */\n",
-       "  border: var(--sklearn-color-unfitted-level-1) 1pt solid;\n",
-       "  color: var(--sklearn-color-unfitted-level-1);\n",
-       "}\n",
-       "\n",
-       ".sk-estimator-doc-link.fitted,\n",
-       "a:link.sk-estimator-doc-link.fitted,\n",
-       "a:visited.sk-estimator-doc-link.fitted {\n",
-       "  /* fitted */\n",
-       "  border: var(--sklearn-color-fitted-level-1) 1pt solid;\n",
-       "  color: var(--sklearn-color-fitted-level-1);\n",
-       "}\n",
-       "\n",
-       "/* On hover */\n",
-       "div.sk-estimator:hover .sk-estimator-doc-link:hover,\n",
-       ".sk-estimator-doc-link:hover,\n",
-       "div.sk-label-container:hover .sk-estimator-doc-link:hover,\n",
-       ".sk-estimator-doc-link:hover {\n",
-       "  /* unfitted */\n",
-       "  background-color: var(--sklearn-color-unfitted-level-3);\n",
-       "  color: var(--sklearn-color-background);\n",
-       "  text-decoration: none;\n",
-       "}\n",
-       "\n",
-       "div.sk-estimator.fitted:hover .sk-estimator-doc-link.fitted:hover,\n",
-       ".sk-estimator-doc-link.fitted:hover,\n",
-       "div.sk-label-container:hover .sk-estimator-doc-link.fitted:hover,\n",
-       ".sk-estimator-doc-link.fitted:hover {\n",
-       "  /* fitted */\n",
-       "  background-color: var(--sklearn-color-fitted-level-3);\n",
-       "  color: var(--sklearn-color-background);\n",
-       "  text-decoration: none;\n",
-       "}\n",
-       "\n",
-       "/* Span, style for the box shown on hovering the info icon */\n",
-       ".sk-estimator-doc-link span {\n",
-       "  display: none;\n",
-       "  z-index: 9999;\n",
-       "  position: relative;\n",
-       "  font-weight: normal;\n",
-       "  right: .2ex;\n",
-       "  padding: .5ex;\n",
-       "  margin: .5ex;\n",
-       "  width: min-content;\n",
-       "  min-width: 20ex;\n",
-       "  max-width: 50ex;\n",
-       "  color: var(--sklearn-color-text);\n",
-       "  box-shadow: 2pt 2pt 4pt #999;\n",
-       "  /* unfitted */\n",
-       "  background: var(--sklearn-color-unfitted-level-0);\n",
-       "  border: .5pt solid var(--sklearn-color-unfitted-level-3);\n",
-       "}\n",
-       "\n",
-       ".sk-estimator-doc-link.fitted span {\n",
-       "  /* fitted */\n",
-       "  background: var(--sklearn-color-fitted-level-0);\n",
-       "  border: var(--sklearn-color-fitted-level-3);\n",
-       "}\n",
-       "\n",
-       ".sk-estimator-doc-link:hover span {\n",
-       "  display: block;\n",
-       "}\n",
-       "\n",
-       "/* \"?\"-specific style due to the `<a>` HTML tag */\n",
-       "\n",
-       "#sk-container-id-1 a.estimator_doc_link {\n",
-       "  float: right;\n",
-       "  font-size: 1rem;\n",
-       "  line-height: 1em;\n",
-       "  font-family: monospace;\n",
-       "  background-color: var(--sklearn-color-background);\n",
-       "  border-radius: 1rem;\n",
-       "  height: 1rem;\n",
-       "  width: 1rem;\n",
-       "  text-decoration: none;\n",
-       "  /* unfitted */\n",
-       "  color: var(--sklearn-color-unfitted-level-1);\n",
-       "  border: var(--sklearn-color-unfitted-level-1) 1pt solid;\n",
-       "}\n",
-       "\n",
-       "#sk-container-id-1 a.estimator_doc_link.fitted {\n",
-       "  /* fitted */\n",
-       "  border: var(--sklearn-color-fitted-level-1) 1pt solid;\n",
-       "  color: var(--sklearn-color-fitted-level-1);\n",
-       "}\n",
-       "\n",
-       "/* On hover */\n",
-       "#sk-container-id-1 a.estimator_doc_link:hover {\n",
-       "  /* unfitted */\n",
-       "  background-color: var(--sklearn-color-unfitted-level-3);\n",
-       "  color: var(--sklearn-color-background);\n",
-       "  text-decoration: none;\n",
-       "}\n",
-       "\n",
-       "#sk-container-id-1 a.estimator_doc_link.fitted:hover {\n",
-       "  /* fitted */\n",
-       "  background-color: var(--sklearn-color-fitted-level-3);\n",
-       "}\n",
-       "</style><div id=\"sk-container-id-1\" class=\"sk-top-container\"><div class=\"sk-text-repr-fallback\"><pre>LogisticRegression()</pre><b>In a Jupyter environment, please rerun this cell to show the HTML representation or trust the notebook. <br />On GitHub, the HTML representation is unable to render, please try loading this page with nbviewer.org.</b></div><div class=\"sk-container\" hidden><div class=\"sk-item\"><div class=\"sk-estimator fitted sk-toggleable\"><input class=\"sk-toggleable__control sk-hidden--visually\" id=\"sk-estimator-id-1\" type=\"checkbox\" checked><label for=\"sk-estimator-id-1\" class=\"sk-toggleable__label fitted sk-toggleable__label-arrow\"><div><div>LogisticRegression</div></div><div><a class=\"sk-estimator-doc-link fitted\" rel=\"noreferrer\" target=\"_blank\" href=\"https://scikit-learn.org/1.6/modules/generated/sklearn.linear_model.LogisticRegression.html\">?<span>Documentation for LogisticRegression</span></a><span class=\"sk-estimator-doc-link fitted\">i<span>Fitted</span></span></div></label><div class=\"sk-toggleable__content fitted\"><pre>LogisticRegression()</pre></div> </div></div></div></div>"
-      ],
-      "text/plain": [
-       "LogisticRegression()"
-      ]
-     },
-     "execution_count": 9,
-     "metadata": {},
-     "output_type": "execute_result"
-    }
-   ],
-   "source": [
-    "#Train the model\n",
-    "model = LogisticRegression()\n",
-    "model.fit(X_train, y_train)\n"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 11,
-   "id": "83a473fc-f5f6-4e26-a2e4-41075f93b845",
-   "metadata": {},
-   "outputs": [
-    {
-     "name": "stdout",
-     "output_type": "stream",
-     "text": [
-      "Accuracy: 0.9090909090909091\n",
-      "              precision    recall  f1-score   support\n",
-      "\n",
-      "           0       0.82      1.00      0.90        14\n",
-      "           1       1.00      0.84      0.91        19\n",
-      "\n",
-      "    accuracy                           0.91        33\n",
-      "   macro avg       0.91      0.92      0.91        33\n",
-      "weighted avg       0.93      0.91      0.91        33\n",
-      "\n"
-     ]
-    }
-   ],
-   "source": [
-    "#Test the model\n",
-    "y_pred = model.predict(X_test)\n",
-    "print(\"Accuracy:\", accuracy_score(y_test, y_pred))\n",
-    "print(classification_report(y_test, y_pred))\n",
-    "\n"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 13,
-   "id": "d4b9278f-a882-455e-a233-0aa3efd6d754",
-   "metadata": {},
-   "outputs": [
-    {
-     "name": "stdout",
-     "output_type": "stream",
-     "text": [
-      "🩸 Spooky! (Spookiness Score: 56.76%)\n",
-      "🎃 Not spooky (Spookiness Score: 43.58%)\n"
-     ]
-    }
-   ],
-   "source": [
-    "#Predict spookiness for a new post\n",
-    "def predict_spookiness(post):\n",
-    "    text_vec = vectorizer.transform([post])\n",
-    "    prediction = model.predict(text_vec)[0]\n",
-    "    score = model.predict_proba(text_vec)[0][1] * 100  # Probability of spookiness\n",
-    "    label = \"🩸 Spooky!\" if prediction == 1 else \"🎃 Not spooky\"\n",
-    "    return f\"{label} (Spookiness Score: {score:.2f}%)\"\n",
-    "\n",
-    "# Example\n",
-    "print(predict_spookiness(\"The ghost whispered my name...\"))\n",
-    "print(predict_spookiness(\"Had fun at the costume party!\"))\n"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 14,
-   "id": "bbc2e278-4106-4ad4-a64e-007e6e5b555b",
-   "metadata": {},
-   "outputs": [
-    {
-     "name": "stdout",
-     "output_type": "stream",
-     "text": [
-      "Spookiness Score: 73.28\n",
-      "Recommended Costumes: 🧟 Zombie, 🧞 Genie, 🧝 Elf\n"
-     ]
-    }
-   ],
-   "source": [
-    "#Recommend costumes\n",
-    "def recommend_costume(score):\n",
-    "    if score > 80:\n",
-    "        return \"👻 Ghost, 💀 Skeleton, 🧛 Vampire, 🧙 Witch\"\n",
-    "    elif score > 60:\n",
-    "        return \"🧟 Zombie, 🧞 Genie, 🧝 Elf\"\n",
-    "    elif score > 40:\n",
-    "        return \"🧚 Fairy, 🐺 Werewolf, 🦹 Villain\"\n",
-    "    else:\n",
-    "        return \"🎩 Magician, 🐱 Cat, 🎃 Pumpkin\"\n",
-    "\n",
-    "# Example\n",
-    "post = \"Something moved in the dark behind me...\"\n",
-    "text_vec = vectorizer.transform([post])\n",
-    "score = model.predict_proba(text_vec)[0][1] * 100\n",
-    "print(\"Spookiness Score:\", round(score,2))\n",
-    "print(\"Recommended Costumes:\", recommend_costume(score))\n"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": 15,
-   "id": "96560859-78d0-426f-8b17-2d9fd8c3104c",
-   "metadata": {},
-   "outputs": [
-    {
-     "name": "stdout",
-     "output_type": "stream",
-     "text": [
-      "Model and vectorizer saved!\n"
-     ]
-    }
-   ],
-   "source": [
-    "# Saving the model\n",
-    "with open('sentiment_model.pkl', 'wb') as f:\n",
-    "    pickle.dump(model, f)\n",
-    "\n",
-    "with open('tfidf_vectorizer.pkl', 'wb') as f:\n",
-    "    pickle.dump(vectorizer, f)\n",
-    "\n",
-    "print(\"Model and vectorizer saved!\")\n"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": null,
-   "id": "ca3a1002-66d2-4343-ba89-64992c134a6d",
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "# streamlit_app.py\n",
-    "import streamlit as st\n",
-    "import pickle\n",
-    "import cv2\n",
-    "from PIL import Image\n",
-    "import numpy as np\n",
-    "\n",
-    "# Load saved model and vectorizer\n",
-    "with open('sentiment_model.pkl', 'rb') as f:\n",
-    "    model = pickle.load(f)\n",
-    "with open('tfidf_vectorizer.pkl', 'rb') as f:\n",
-    "    vectorizer = pickle.load(f)\n",
-    "\n",
-    "# ----------------------------\n",
-    "# Step 1: Spookiness prediction\n",
-    "# ----------------------------\n",
-    "def predict_spookiness(post):\n",
-    "    vec = vectorizer.transform([post])\n",
-    "    pred = model.predict(vec)[0]\n",
-    "    score = model.predict_proba(vec)[0][1] * 100\n",
-    "    label = \"🩸 Spooky!\" if pred == 1 else \"🎃 Not spooky\"\n",
-    "    return label, score\n",
-    "\n",
-    "# ----------------------------\n",
-    "# Step 2: Costume recommendation\n",
-    "# ----------------------------\n",
-    "def recommend_costume(score):\n",
-    "    if score > 80:\n",
-    "        return \"👻 Ghost, 💀 Skeleton, 🧛 Vampire, 🧙 Witch\"\n",
-    "    elif score > 60:\n",
-    "        return \"🧟 Zombie, 🧞 Genie, 🧝 Elf\"\n",
-    "    elif score > 40:\n",
-    "        return \"🧚 Fairy, 🐺 Werewolf, 🦹 Villain\"\n",
-    "    else:\n",
-    "        return \"🎩 Magician, 🐱 Cat, 🎃 Pumpkin\"\n",
-    "\n",
-    "# ----------------------------\n",
-    "# Step 3: Facial makeup spookiness\n",
-    "# ----------------------------\n",
-    "def rate_makeup(image):\n",
-    "    img = np.array(image.convert('RGB'))\n",
-    "    gray = cv2.cvtColor(img, cv2.COLOR_RGB2GRAY)\n",
-    "    face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')\n",
-    "    faces = face_cascade.detectMultiScale(gray, 1.1, 4)\n",
-    "    if len(faces) == 0:\n",
-    "        return \"No face detected\"\n",
-    "    scores = []\n",
-    "    for (x, y, w, h) in faces:\n",
-    "        face = img[y:y+h, x:x+w]\n",
-    "        brightness = face.mean()\n",
-    "        contrast = face.std()\n",
-    "        # simple \"blood/red\" detection\n",
-    "        r,g,b = cv2.split(face)\n",
-    "        red_mask = (r>120) & (r>g+30) & (r>b+30)\n",
-    "        red_ratio = red_mask.sum() / (w*h)\n",
-    "        score = (contrast/128)*40 + (1 - brightness/255)*40 + (red_ratio*100)*0.2\n",
-    "        scores.append(np.clip(score, 0, 100))\n",
-    "    return round(np.mean(scores),2)\n",
-    "\n",
-    "# ----------------------------\n",
-    "# Streamlit Interface\n",
-    "# ----------------------------\n",
-    "st.title(\"Hauntify 🎃 — Spookiness & Costume Recommender\")\n",
-    "\n",
-    "post = st.text_area(\"Enter your Halloween post:\")\n",
-    "\n",
-    "uploaded_file = st.file_uploader(\"Upload your face image (optional)\", type=[\"jpg\",\"png\",\"jpeg\"])\n",
-    "\n",
-    "if st.button(\"Analyze\"):\n",
-    "    if post:\n",
-    "        label, score = predict_spookiness(post)\n",
-    "        st.metric(\"Spookiness\", f\"{score:.2f}% ({label})\")\n",
-    "        st.subheader(\"Recommended Costumes\")\n",
-    "        st.write(recommend_costume(score))\n",
-    "    if uploaded_file:\n",
-    "        image = Image.open(uploaded_file)\n",
-    "        st.image(image, caption=\"Uploaded Image\", width=250)\n",
-    "        makeup_score = rate_makeup(image)\n",
-    "        st.metric(\"Makeup Spookiness\", f\"{makeup_score}\")\n"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": null,
-   "id": "36c88dfd-4457-4759-a525-c6c9618957b9",
-   "metadata": {},
-   "outputs": [],
-   "source": []
-  }
- ],
- "metadata": {
-  "kernelspec": {
-   "display_name": "Python 3 (ipykernel)",
-   "language": "python",
-   "name": "python3"
-  },
-  "language_info": {
-   "codemirror_mode": {
-    "name": "ipython",
-    "version": 3
-   },
-   "file_extension": ".py",
-   "mimetype": "text/x-python",
-   "name": "python",
-   "nbconvert_exporter": "python",
-   "pygments_lexer": "ipython3",
-   "version": "3.13.5"
-  }
- },
- "nbformat": 4,
- "nbformat_minor": 5
-}
+# hauntify_app.py
+
+import pandas as pd
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.linear_model import LogisticRegression
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import accuracy_score, classification_report
+import pickle
+import os
+import streamlit as st
+
+# -----------------------------
+# Load or Train Model
+# -----------------------------
+MODEL_PATH = 'models/sentiment_model.pkl'
+VECTORIZER_PATH = 'models/tfidf_vectorizer.pkl'
+
+if not os.path.exists(MODEL_PATH) or not os.path.exists(VECTORIZER_PATH):
+    # Load dataset
+    df = pd.read_csv(r"C:\Users\adminS\OneDrive\Data Science\hauntify_posts.csv")
+    
+    # Convert text to numbers
+    vectorizer = TfidfVectorizer()
+    X = vectorizer.fit_transform(df['post'])
+    y = df['label']
+    
+    # Split data
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
+    
+    # Train model
+    model = LogisticRegression()
+    model.fit(X_train, y_train)
+    
+    # Test model
+    y_pred = model.predict(X_test)
+    print("Accuracy:", accuracy_score(y_test, y_pred))
+    print(classification_report(y_test, y_pred))
+    
+    # Save model and vectorizer
+    os.makedirs('models', exist_ok=True)
+    with open(MODEL_PATH, 'wb') as f:
+        pickle.dump(model, f)
+    with open(VECTORIZER_PATH, 'wb') as f:
+        pickle.dump(vectorizer, f)
+else:
+    # Load existing model
+    with open(MODEL_PATH, 'rb') as f:
+        model = pickle.load(f)
+    with open(VECTORIZER_PATH, 'rb') as f:
+        vectorizer = pickle.load(f)
+
+# -----------------------------
+# Helper Functions
+# -----------------------------
+def predict_spookiness(post):
+    text_vec = vectorizer.transform([post])
+    prediction = model.predict(text_vec)[0]
+    score = model.predict_proba(text_vec)[0][1] * 100  # Probability of spookiness
+    label = "🩸 Spooky!" if prediction == 1 else "🎃 Not spooky"
+    return f"{label} (Spookiness Score: {score:.2f}%)", score
+
+def recommend_costume(score):
+    if score > 80:
+        return "👻 Ghost, 💀 Skeleton, 🧛 Vampire, 🧙 Witch"
+    elif score > 60:
+        return "🧟 Zombie, 🧞 Genie, 🧝 Elf"
+    elif score > 40:
+        return "🧚 Fairy, 🐺 Werewolf, 🦹 Villain"
+    else:
+        return "🎩 Magician, 🐱 Cat, 🎃 Pumpkin"
+
+# -----------------------------
+# Streamlit UI
+# -----------------------------
+st.set_page_config(page_title="Hauntify 🎃", page_icon="👻", layout="wide")
+st.title("Hauntify: Spookiness Predictor & Costume Recommender")
+
+user_input = st.text_area("Enter your Halloween post or text:")
+
+if st.button("Analyze"):
+    if user_input.strip() != "":
+        result, score = predict_spookiness(user_input)
+        st.success(result)
+        st.info(f"Recommended Costumes: {recommend_costume(score)}")
+    else:
+        st.warning("Please enter some text to analyze!")
