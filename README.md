@@ -14,12 +14,7 @@ Hauntify is a fun and interactive web application that lets users capture photos
 
 ---
 
-## Demo
 
-![Hauntify Screenshot](screenshots/demo.png)  
-*(Add your own screenshot of the app here)*  
-
----
 
 ## Tech Stack
 
