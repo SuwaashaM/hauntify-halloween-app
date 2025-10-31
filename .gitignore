@@ -3,3 +3,4 @@ __pycache__/
 *.pkl
 overlays/
 .env
+hauntify-halloween-app/
