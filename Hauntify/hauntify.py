@@ -736,17 +736,6 @@
   {
    "cell_type": "code",
    "execution_count": null,
-   "id": "8d67d722-348f-4b1a-ac9d-4a851f0bd01a",
-   "metadata": {},
-   "outputs": [],
-   "source": [
-    "#Run the Streamlit app\n",
-    "streamlit run streamlit_app.py\n"
-   ]
-  },
-  {
-   "cell_type": "code",
-   "execution_count": null,
    "id": "36c88dfd-4457-4759-a525-c6c9618957b9",
    "metadata": {},
    "outputs": [],
